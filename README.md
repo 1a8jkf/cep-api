@@ -1,6 +1,6 @@
 # cep-api
 API de Consulta de CEP – Node.js  
-**Desafio Técnico – eGadNet**
+**Desafio Técnico – Egadnet**
 
 Esta é uma API RESTful desenvolvida em Node.js que recebe um CEP via requisição POST, consulta o serviço ViaCEP e retorna as informações de endereço correspondentes.  
 O projeto inclui **autenticação JWT**, **validação de entrada**, **lint configurado** e uma **camada de cache** (Redis ou fallback in-memory).
