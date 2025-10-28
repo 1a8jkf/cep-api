@@ -1,4 +1,4 @@
-# cep-api
+# Cep-api
 
 **API de Consulta de CEP – Node.js**
 Desafio Técnico – Egadnet
