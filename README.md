@@ -166,5 +166,3 @@ npm run lint
 | Configuração | dotenv                         |
 | Lint         | ESLint                         |
 
-Quer que eu faça isso também?
-```
