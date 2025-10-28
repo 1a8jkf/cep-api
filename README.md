@@ -1,61 +1,60 @@
 # cep-api
-API de Consulta de CEP – Node.js  
-**Desafio Técnico – Egadnet**
 
-Esta é uma API RESTful desenvolvida em Node.js que recebe um CEP via requisição POST, consulta o serviço ViaCEP e retorna as informações de endereço correspondentes.  
-O projeto inclui **autenticação JWT**, **validação de entrada**, **lint configurado** e uma **camada de cache** (Redis ou fallback in-memory).
+**API de Consulta de CEP – Node.js**
+Desafio Técnico – Egadnet
+
+Esta é uma API RESTful desenvolvida em Node.js que recebe um CEP via requisição POST, consulta o serviço ViaCEP e retorna as informações de endereço correspondentes.
+O projeto inclui autenticação (token fixo para teste), validação de entrada, lint configurado e uma camada de cache (Redis ou fallback in-memory).
 
 ---
 
 ## Funcionalidades
 
-- Autenticação JWT (token obrigatório em cada requisição)  
-- Validação de CEP (formato `00000-000` ou `00000000`)  
-- Cache automático (respostas armazenadas por 5 minutos)  
-- Consulta em tempo real ao ViaCEP  
-- Código limpo e padronizado (ESLint)  
-- Documentação clara e exemplo de requisição (cURL/Postman)
+* Autenticação via token fixo (obrigatório em cada requisição)
+* Validação de CEP (formato `00000-000` ou `00000000`)
+* Cache automático (respostas armazenadas por 5 minutos)
+* Consulta em tempo real ao ViaCEP
+* Código limpo e padronizado (ESLint)
 
 ---
 
 ## Instalação e Configuração
 
-### 1. Clonar o repositório
+1. Clonar o repositório:
+
 ```bash
 git clone https://github.com/seu-usuario/cep-api.git
 cd cep-api
-````
+```
 
-### 2. Instalar dependências
+2. Instalar dependências:
 
 ```bash
 npm install
 ```
 
-### 3. Configurar variáveis de ambiente
-
-Crie um arquivo `.env` na raiz do projeto:
+3. Configurar variáveis de ambiente:
+   Crie um arquivo `.env` na raiz do projeto:
 
 ```
 PORT=3000
-JWT_SECRET=sua_chave_jwt
+JWT_SECRET=1234567890abcdef
 CACHE_TTL=300
-REDIS_URL=redis://localhost:6379
 ```
 
-> Caso não possua Redis instalado, o cache funcionará automaticamente em memória local.
+> Obs.: Com Redis ausente, o cache funciona automaticamente em memória local.
 
 ---
 
 ## Execução do Projeto
 
-### Ambiente de desenvolvimento
+* **Desenvolvimento:**
 
 ```bash
 npm run dev
 ```
 
-### Ambiente de produção
+* **Produção:**
 
 ```bash
 npm start
@@ -65,11 +64,11 @@ npm start
 
 ## Testando a API
 
-Para testar, **inicie o servidor em um terminal** com `npm run dev` e use outro terminal para executar as requisições (exemplo no PowerShell):
+Para testar, inicie o servidor em um terminal com `npm run dev` e use outro terminal para executar as requisições (exemplo no PowerShell):
 
 ```powershell
 $headers = @{
-    "Authorization" = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ0ZXN0ZSIsImlhdCI6MTc2MTY1ODcxMiwiZXhwIjoxNzYxNjg3NTEyfQ.CyIs6v0FGXFPV0VTjm8Q47VlSVK9jOl0EHnsFyCdG70"
+    "Authorization" = "Bearer 1234567890abcdef"
     "Content-Type"  = "application/json"
 }
 
@@ -81,42 +80,39 @@ Invoke-RestMethod -Uri http://localhost:3000/cep -Method POST -Headers $headers 
 ```
 
 * Substitua `"cep"` pelo CEP que deseja consultar.
-* A primeira vez que consultar, `fromCache` será `false`.
-* Consultas repetidas dentro de 5 minutos retornarão `fromCache: true`.
+* A primeira consulta retorna `"fromCache": false`.
+* Consultas repetidas dentro de 5 minutos retornarão `"fromCache": true`.
 
 ---
 
 ## Autenticação
 
-A API utiliza **JWT (JSON Web Token)**.
-Antes de chamar as rotas protegidas, gere um token válido.
+A API utiliza **token fixo para teste**.
 
-Exemplo de header:
+* **Token de exemplo:** `1234567890abcdef`
+* Inclua no header da requisição:
 
 ```
-Authorization: Bearer <seu_token_jwt>
+Authorization: Bearer 1234567890abcdef
 ```
 
 ---
 
 ## Exemplo de Requisição
 
-### Endpoint
+**Endpoint:**
+`POST /cep`
 
-```
-POST /cep
-```
-
-### Request (cURL)
+**Request (cURL):**
 
 ```bash
 curl -X POST http://localhost:3000/cep \
   -H "Content-Type: application/json" \
-  -H "Authorization: Bearer <seu_token_jwt>" \
+  -H "Authorization: Bearer 1234567890abcdef" \
   -d '{"cep": "01001000"}'
 ```
 
-### Response
+**Response:**
 
 ```json
 {
@@ -131,7 +127,7 @@ curl -X POST http://localhost:3000/cep \
 }
 ```
 
-> Se o mesmo CEP for consultado dentro de 5 minutos:
+Se o mesmo CEP for consultado dentro de 5 minutos:
 
 ```json
 {
@@ -144,7 +140,7 @@ curl -X POST http://localhost:3000/cep \
 
 ## Lint
 
-O projeto segue as regras do **ESLint (StandardJS)**.
+O projeto segue as regras do ESLint (StandardJS).
 Para verificar a padronização:
 
 ```bash
@@ -159,10 +155,9 @@ npm run lint
 | ------------ | ------------------------------ |
 | Linguagem    | Node.js (JavaScript)           |
 | Framework    | Express.js                     |
-| Autenticação | JWT (jsonwebtoken)             |
+| Autenticação | Token fixo para teste          |
 | Cache        | Redis (ou node-cache fallback) |
 | HTTP Client  | Axios                          |
 | Validação    | Regex / Validator              |
 | Configuração | dotenv                         |
 | Lint         | ESLint                         |
-
